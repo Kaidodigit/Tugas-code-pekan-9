@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 
 
+<<<<<<< Updated upstream
 // Halaman utama -> login
 Route::get('/', fn () => redirect()->route('login'));
 
@@ -55,4 +56,27 @@ Route::get('/tes-koneksi', function () {
     } catch (\Exception $e) {
         return "DB gagal connect: " . $e->getMessage();
     }
+=======
+
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.process');
+
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'Login'])->name('login.process');
+});
+
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'Logout'])->name('logout');
+
+    Route::get('/perawatan', [PerawatanArmadaController::class, 'index'])->name('perawatan.index');
+    Route::post('/perawatan/store', [PerawatanArmadaController::class, 'store'])->name('perawatan.store');
+    Route::post('/perawatan/update/{id}', [PerawatanArmadaController::class, 'update'])->name('perawatan.update');
+
+    Route::get('/perawatan/hapus/{id}', [PerawatanArmadaController::class, 'destroy'])
+        ->middleware('role:admin')
+        ->name('perawatan.destroy');
+>>>>>>> Stashed changes
 });

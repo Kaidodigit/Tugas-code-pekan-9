@@ -1,12 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+<<<<<<< Updated upstream
     // Menampilkan halaman login
     public function showLogin()
     {
@@ -15,6 +21,45 @@ class AuthController extends Controller
         }
 
         return view('auth.login');
+=======
+    public function showLogin(){
+        return view('login');
+    }
+
+    public function showRegister(){
+    return view('register');
+    }
+
+public function register(Request $request){
+    $request->validate([
+        'username' => 'required|unique:users,username',
+        'password' => 'required|min:6',
+    ]);
+
+    User::create([
+        'username' => $request->username,
+        'password' => Hash::make($request->password),
+        'role'     => 'staff',
+    ]);
+
+    return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
+    }
+
+    public function Login(Request $request){
+        $credentials = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();             
+            return redirect()->intended(route('home'));     
+        }
+
+        return back()
+            ->withErrors(['username' => 'Username atau password salah.'])
+            ->onlyInput('username');
+>>>>>>> Stashed changes
     }
 
     
